@@ -10,3 +10,9 @@
 .idea/
 *.iml
 *.iws
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
