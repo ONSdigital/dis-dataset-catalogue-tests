@@ -19,10 +19,22 @@ Install dependencies:
 poetry install
 ```
 
+Install Playwright browsers:
+
+```bash
+poetry run playwright install
+```
+
 Run tests:
 
 ```bash
-poetry run pytest
+poetry run behave
+```
+
+Or using make:
+
+```bash
+make test
 ```
 
 ### Configuration
