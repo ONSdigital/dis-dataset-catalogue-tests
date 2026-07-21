@@ -151,7 +151,6 @@ def delete_dataset(context, dataset_id):
 def add_version(context, dataset_id, edition_id):
     _post_dataset(context, dataset_id)
     context.response = _post_version(context, edition_id, 1)
-    print()
 
 
 @when(
@@ -200,13 +199,13 @@ def update_version(context, dataset_id, edition_id, version):
 
 
 @when(
-    'I update the state for version "{version}" for dataset ID "{dataset_id}", edition ID "{edition_id}"'
+    'I update the state to "{state}" for version "{version}" for dataset ID "{dataset_id}", edition ID "{edition_id}"'
 )
-def update_version_state(context, dataset_id, edition_id, version):
+def update_version_state(context, dataset_id, edition_id, version, state):
     _post_dataset(context, dataset_id)
     _post_version(context, edition_id, version)
     _post_file_metadata(context, version)
-    put_state_body = {"type": "static", "state": "approved"}
+    put_state_body = {"type": "static", "state": state}
     context.response = requests.put(
         f"{context.dataset_api_url}/datasets/{context.dataset_id}/editions/{context.edition_id}/versions/{version}",
         json=put_state_body,
@@ -257,6 +256,12 @@ def response_should_contain_version(context, version):
     assert data["version"] == int(version)
 
 
+@then('the response should contain the version with state "{state}"')
+def response_should_contain_version(context, state):
+    data = context.response.json()
+    assert data["state"] == state
+
+
 @then('the response should contain the metadata for version "{version}"')
 def response_should_contain_metadata(context, version):
     data = context.response.json()
@@ -277,7 +282,13 @@ def response_should_contain_options(context, dimension):
     assert options == ["K02000001"]
 
 
-@then('the response should include the updated title "{new_title}"')
+@then('the response should include the updated dataset title "{new_title}"')
 def response_should_contain_new_title(context, new_title):
     data = context.response.json()
     assert new_title in data["title"]
+
+
+@then('the response should include the updated edition title "{new_title}"')
+def response_should_contain_new_title(context, new_title):
+    data = context.response.json()
+    assert new_title in data["edition_title"]

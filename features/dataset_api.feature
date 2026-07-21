@@ -64,7 +64,7 @@ Feature: Dataset API
     Given the dataset API is available
     When I update the dataset "dataset-to-update" with title "Changed dataset title"
     Then the response status code should be "200"
-    And the response should include the updated title "Changed dataset title"
+    And the response should include the updated dataset title "Changed dataset title"
 
   Scenario: Delete a dataset by ID
     Given the dataset API is available
@@ -75,21 +75,25 @@ Feature: Dataset API
     Given the dataset API is available
     When I add a new version for dataset ID "dataset-add-version" and edition ID "edition-add-version"
     Then the response status code should be "201"
+    And the response should contain the version with ID "1"
 
   Scenario: Add a version by ID
     Given the dataset API is available
     When I add a new version for dataset ID "dataset-add-version", edition ID "edition-add-version" and version "1"
     Then the response status code should be "201"
+    And the response should contain the version with ID "1"
 
   Scenario: Update a version
     Given the dataset API is available
     When I update version "1" for dataset ID "dataset-update-version", edition ID "edition-update-version"
     Then the response status code should be "200"
+    And the response should include the updated edition title "New edition title"
 
     Scenario: Update state of a version
     Given the dataset API is available
-    When I update the state for version "1" for dataset ID "dataset-update-state", edition ID "edition-update-state"
+    When I update the state to "approved" for version "1" for dataset ID "dataset-update-state", edition ID "edition-update-state"
     Then the response status code should be "200"
+    And the response should contain the version with state "approved"
 
 
   Scenario: Delete a version by ID
