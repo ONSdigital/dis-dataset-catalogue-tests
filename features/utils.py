@@ -2,6 +2,7 @@ import random
 import string
 
 import requests
+from uuid import uuid4
 
 FILES_API_URL = "http://localhost:26900"
 
@@ -32,11 +33,12 @@ def _post_version(context, edition_id, version):
     context.filename = (
         f"{"".join(random.choice(string.ascii_lowercase) for i in range(8))}.csv"
     )
+    context.path = f"{uuid4()}/{context.filename}"
     version_body = {
         "distributions": [
             {
                 "title": "CSV distribution",
-                "download_url": f"{context.dataset_id}/{context.edition_id}/{version}/{context.filename}",
+                "download_url": context.path,
                 "format": "csv",
             }
         ],
@@ -57,15 +59,31 @@ def _post_versions(context, edition_id, num_versions):
     context.filename = (
         f"{"".join(random.choice(string.ascii_lowercase) for i in range(8))}.csv"
     )
+    context.path = f"{uuid4()}/{context.filename}"
     for i in range(num_versions):
-        _post_version(context, context.edition_id, i)
+        version_body = {
+            "distributions": [
+                {
+                    "title": "CSV distribution",
+                    "download_url": context.path,
+                    "format": "csv",
+                }
+            ],
+            "edition_title": f"{context.edition_id}",
+            "release_date": "2026-12-31T00:00:00.000Z",
+            "type": "static",
+        }
+        requests.post(
+            f"{context.dataset_api_url}/datasets/{context.dataset_id}/editions/{context.edition_id}/versions",
+            json=version_body,
+            headers=context.headers,
+        )
         _post_file_metadata(context, i)
 
 
 def _post_file_metadata(context, version):
-    path = f"{context.dataset_id}/{context.edition_id}/{version}/{context.filename}"
     file_metadata_body = {
-        "path": path,
+        "path": context.path,
         "is_publishable": True,
         "title": "Data CSV",
         "size_in_bytes": 458,
@@ -83,7 +101,7 @@ def _post_file_metadata(context, version):
         f"{FILES_API_URL}/files", json=file_metadata_body, headers=context.headers
     )
     requests.patch(
-        f"{FILES_API_URL}/files/{path}",
+        f"{FILES_API_URL}/files/{context.path}",
         json={"state": "UPLOADED", "etag": "etag"},
         headers=context.headers,
     )

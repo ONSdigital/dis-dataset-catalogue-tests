@@ -96,7 +96,7 @@ def request_version_metadata(context, dataset_id, edition_id, version):
 @when(
     'I request the dimensions for dataset ID "{dataset_id}", edition ID "{edition_id}", version "{version}"'
 )
-def request_version_dimensions(context, dataset_id, edition_id, version):
+def request_dimension_options(context, dataset_id, edition_id, version):
     context.response = requests.get(
         f"{context.dataset_api_url}/datasets/{dataset_id}/editions/{edition_id}/versions/{version}/dimensions",
         headers=context.headers,
@@ -106,7 +106,7 @@ def request_version_dimensions(context, dataset_id, edition_id, version):
 @when(
     'I request the options for dataset ID "{dataset_id}", edition ID "{edition_id}", version "{version}", dimension "{dimension}"'
 )
-def request_version_dimensions(context, dataset_id, edition_id, version, dimension):
+def request_dimension_options(context, dataset_id, edition_id, version, dimension):
     context.response = requests.get(
         f"{context.dataset_api_url}/datasets/{dataset_id}/editions/{edition_id}/versions/{version}/dimensions/{dimension}/options",
         headers=context.headers,
@@ -211,6 +211,7 @@ def update_version_state(context, dataset_id, edition_id, version, state):
         json=put_state_body,
         headers=context.headers,
     )
+    print()
 
 
 @when(
@@ -257,7 +258,7 @@ def response_should_contain_version(context, version):
 
 
 @then('the response should contain the version with state "{state}"')
-def response_should_contain_version(context, state):
+def response_should_contain_version_with_state(context, state):
     data = context.response.json()
     assert data["state"] == state
 

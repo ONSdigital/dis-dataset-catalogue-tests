@@ -9,7 +9,7 @@ if __name__ == "__main__":
         # Two lines below used to specify a single scenario within the feature file
         # Comment out to debug all scenarios in the given feature file
         "-n",
-        "Get editions for a dataset",
+        "Update state of a version",
     ]
     configuration = Configuration(args)
     sys.exit(run_behave(configuration))

@@ -37,6 +37,10 @@ Or using make:
 make test
 ```
 
+### Debugging behaviour tests
+
+Use the `behave_debug.py` script in the root of the repo to debug behaviour tests. There are 3 arguments in the `args` list. The first argument specifies the file path of the feature file to be debugged. The second and third arguments allow you to set a specific scenario within the feature file that you want to debug. Comment out these arguments to debug all scenarios in the specified feature file. Set breakpoints in the step definition functions to inspect variables and context values at each step.
+
 ### Configuration
 
 ## Contributing

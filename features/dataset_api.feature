@@ -89,7 +89,7 @@ Feature: Dataset API
     Then the response status code should be "200"
     And the response should include the updated edition title "New edition title"
 
-    Scenario: Update state of a version
+  Scenario: Update state of a version
     Given the dataset API is available
     When I update the state to "approved" for version "1" for dataset ID "dataset-update-state", edition ID "edition-update-state"
     Then the response status code should be "200"
