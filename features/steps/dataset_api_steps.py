@@ -188,7 +188,7 @@ def update_version(context, dataset_id, edition_id, version):
     _post_dataset(context, dataset_id)
     _post_version(context, edition_id, version)
     update_version_body = {
-        "edition_title": f"New edition title",
+        "edition_title": "New edition title",
         "type": "static",
     }
     context.response = requests.put(
