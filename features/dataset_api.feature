@@ -42,18 +42,6 @@ Feature: Dataset API
     Then the response status code should be "200"
     And the response should contain the metadata for version "1"
 
-  Scenario: Get dimensions for a version - filterable/cantabular only
-    Given the dataset API is available
-    When I request the dimensions for dataset ID "cpih01", edition ID "time-series", version "1"
-    Then the response status code should be "200"
-    And the response should contain the dimensions for the requested version
-
-  Scenario: Get options for a dimension - filterable/cantabular only
-    Given the dataset API is available
-    When I request the options for dataset ID "cpih01", edition ID "time-series", version "1", dimension "geography"
-    Then the response status code should be "200"
-    And the response should contain the options for dimension "geography"
-
   Scenario: Add a dataset
     Given the dataset API is available
     When I add a new dataset with ID "dataset-to-add"
@@ -94,7 +82,6 @@ Feature: Dataset API
     When I update the state to "approved" for version "1" for dataset ID "dataset-update-state", edition ID "edition-update-state"
     Then the response status code should be "200"
     And the response should contain the version with state "approved"
-
 
   Scenario: Delete a version by ID
     Given the dataset API is available

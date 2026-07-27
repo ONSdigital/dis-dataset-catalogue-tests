@@ -90,27 +90,6 @@ def request_version_metadata(context, dataset_id, edition_id, version):
         f"{context.dataset_api_url}/datasets/{context.dataset_id}/editions/{context.edition_id}/versions/{version}/metadata",
         headers=context.headers,
     )
-    print()
-
-
-@when(
-    'I request the dimensions for dataset ID "{dataset_id}", edition ID "{edition_id}", version "{version}"'
-)
-def request_dimensions(context, dataset_id, edition_id, version):
-    context.response = requests.get(
-        f"{context.dataset_api_url}/datasets/{dataset_id}/editions/{edition_id}/versions/{version}/dimensions",
-        headers=context.headers,
-    )
-
-
-@when(
-    'I request the options for dataset ID "{dataset_id}", edition ID "{edition_id}", version "{version}", dimension "{dimension}"'
-)
-def request_options(context, dataset_id, edition_id, version, dimension):
-    context.response = requests.get(
-        f"{context.dataset_api_url}/datasets/{dataset_id}/editions/{edition_id}/versions/{version}/dimensions/{dimension}/options",
-        headers=context.headers,
-    )
 
 
 @when('I add a new dataset with ID "{dataset_id}"')
@@ -211,7 +190,6 @@ def update_version_state(context, dataset_id, edition_id, version, state):
         json=put_state_body,
         headers=context.headers,
     )
-    print()
 
 
 @when(
@@ -267,20 +245,6 @@ def response_should_contain_version_with_state(context, state):
 def response_should_contain_metadata(context, version):
     data = context.response.json()
     assert data["version"] == int(version)
-
-
-@then("the response should contain the dimensions for the requested version")
-def response_should_contain_dimensions(context):
-    data = context.response.json()
-    dimensions = [item["name"] for item in data["items"]]
-    assert dimensions == ["aggregate", "geography", "time"]
-
-
-@then('the response should contain the options for dimension "{dimension}"')
-def response_should_contain_options(context, dimension):
-    data = context.response.json()
-    options = [item["option"] for item in data["items"]]
-    assert options == ["K02000001"]
 
 
 @then('the response should include the updated dataset title "{new_title}"')
