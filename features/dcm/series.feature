@@ -25,13 +25,13 @@ Feature: DCM Series
         And the user clicks on the Create new series button
         And the user fills in the generated Series ID
         And the user fills in the generated Title
-        And the user fills in "This is a smoke test dataset" as the Description
+        And the user fills in "This is a smoke test dataset" as the "Description"
         And the user expands the "Business, industry and trade" topic
         And the user selects the "Business" subtopic
-        And the user fills in "To be announced" as the Next release
-        And the user fills in "smoke, test" as the Keywords
-        And the user fills in "Test User" as the contact Name
-        And the user fills in "test@ons.gov.uk" as the contact Email
+        And the user fills in "To be announced" as the "Next release"
+        And the user fills in "smoke, test" as the "Keywords"
+        And the user fills in "Test User" as the "Name"
+        And the user fills in "test@ons.gov.uk" as the "Email"
         And the user clicks Add contact
         And the user clicks Create dataset series
         Then the generated dataset should be listed

@@ -31,9 +31,9 @@ def user_fills_in_generated_series_id(context):
 def user_fills_in_generated_title(context):
     context.page.get_by_label("Title").fill(context.series_title)
 
-@when('the user fills in "{value}" as the Description')
-def user_fills_in_description(context, value):
-    context.page.get_by_label("Description").fill(value)
+@when('the user fills in "{value}" as the "{label}"')
+def user_fills_in_value(context, value, label):
+    context.page.get_by_label(label).fill(value)
 
 @when('the user expands the "{topic}" topic')
 def user_expands_topic(context, topic):
@@ -43,21 +43,9 @@ def user_expands_topic(context, topic):
 def user_selects_subtopic(context, subtopic):
     context.page.get_by_label(subtopic).check()
 
-@when('the user fills in "{value}" as the Next release')
-def user_fills_in_next_release(context, value):
-    context.page.get_by_label("Next release").fill(value)
-
-@when('the user fills in "{value}" as the Keywords')
-def user_fills_in_keywords(context, value):
-    context.page.get_by_label("Keywords").fill(value)
-
-@when('the user fills in "{value}" as the contact Name')
-def user_fills_in_contact_name(context, value):
-    context.page.get_by_label("Name").fill(value)
-
-@when('the user fills in "{value}" as the contact Email')
-def user_fills_in_contact_email(context, value):
-    context.page.get_by_label("Email").fill(value)
+@when('the user selects "{value}" as the Quality designation')
+def user_selects_quality_designation(context, value):
+    context.page.get_by_label(value).check()
 
 @when("the user clicks Add contact")
 def user_clicks_add_contact(context):

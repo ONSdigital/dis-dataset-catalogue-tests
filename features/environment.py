@@ -23,7 +23,7 @@ def before_all(context):
         writer.writerow(["1", "test"])
 
     context.playwright = sync_playwright().start()
-    context.browser = context.playwright.chromium.launch(headless=True)
+    context.browser = context.playwright.chromium.launch(headless=False, slow_mo=500)
     browser_context = context.browser.new_context()
 
     # Log in and extract access token

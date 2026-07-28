@@ -31,46 +31,6 @@ def user_fills_in_generated_edition_title(context):
     context.page.get_by_label("Edition title").fill(context.edition_title)
 
 
-@when('the user fills in "{value}" as the Edition ID')
-def user_fills_in_edition_id(context, value):
-    context.page.get_by_label("Edition ID").fill(value)
-
-
-@when('the user fills in "{value}" as the Edition title')
-def user_fills_in_edition_title(context, value):
-    context.page.get_by_label("Edition title").fill(value)
-
-
-@when('the user fills in "{value}" as the Day')
-def user_fills_in_day(context, value):
-    context.page.get_by_label("Day").fill(value)
-
-
-@when('the user fills in "{value}" as the Month')
-def user_fills_in_month(context, value):
-    context.page.get_by_label("Month").fill(value)
-
-
-@when('the user fills in "{value}" as the Year')
-def user_fills_in_year(context, value):
-    context.page.get_by_label("Year").fill(value)
-
-
-@when('the user fills in "{value}" as the Hours')
-def user_fills_in_hours(context, value):
-    context.page.get_by_label("Hours").fill(value)
-
-
-@when('the user fills in "{value}" as the Minutes')
-def user_fills_in_minutes(context, value):
-    context.page.get_by_label("Minutes").fill(value)
-
-
-@when('the user selects "{value}" as the Quality designation')
-def user_selects_quality_designation(context, value):
-    context.page.get_by_label(value).check()
-
-
 @when("the user uploads the test CSV file")
 def user_uploads_test_csv_file(context):
     file_input = context.page.get_by_test_id("dataset-upload-input")
