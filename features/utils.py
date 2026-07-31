@@ -3,8 +3,20 @@ import string
 
 import requests
 from uuid import uuid4
+from pymongo import MongoClient
 
 FILES_API_URL = "http://localhost:26900"
+MONGO_URL = "mongodb://localhost:27017"
+
+
+def _get_mongo_dataset_record_by_id(dataset_id,):
+    mongo_client = MongoClient(MONGO_URL)
+    try:
+        return mongo_client["datasets"]["datasets"].find_one(
+            {"_id": dataset_id}
+        )
+    finally:
+        mongo_client.close()
 
 
 def _post_dataset(context, dataset_id):

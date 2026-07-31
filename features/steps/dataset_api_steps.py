@@ -10,6 +10,7 @@ from features.utils import (
     _post_dataset_with_multiple_versions,
     _post_version,
     _post_file_metadata,
+    _get_mongo_dataset_record_by_id,
 )
 
 DATASET_API_URL = "http://localhost:22000"
@@ -138,14 +139,15 @@ def add_version(context, dataset_id, edition_id):
 def add_version_with_id(context, dataset_id, edition_id, version):
     _post_dataset(context, dataset_id)
     random_edition_id = f"{edition_id}-{"".join(random.choice(string.ascii_lowercase) for i in range(4))}"
-    random_filename = (
-        f"{"".join(random.choice(string.ascii_lowercase) for i in range(8))}.csv"
-    )
+    random_filename = f"{"".join(random.choice(string.ascii_lowercase) for i in range(8))}.csv"
+    context.edition_id = random_edition_id
+    context.path = f"{context.dataset_id}/{random_edition_id}/{version}/{random_filename}"
+
     version_body = {
         "distributions": [
             {
                 "title": "CSV distribution",
-                "download_url": f"{context.dataset_id}/{random_edition_id}/1/{random_filename}",
+                "download_url": context.path,
                 "format": "csv",
             }
         ],
@@ -153,11 +155,13 @@ def add_version_with_id(context, dataset_id, edition_id, version):
         "release_date": "2026-12-31T00:00:00.000Z",
         "type": "static",
     }
+
     context.response = requests.post(
         f"{context.dataset_api_url}/datasets/{context.dataset_id}/editions/{random_edition_id}/versions/{version}",
         json=version_body,
         headers=context.headers,
     )
+    _post_file_metadata(context, version)
 
 
 @when(
@@ -184,6 +188,16 @@ def update_version_state(context, dataset_id, edition_id, version, state):
     _post_dataset(context, dataset_id)
     _post_version(context, edition_id, version)
     _post_file_metadata(context, version)
+    put_state_body = {"type": "static", "state": state}
+    context.response = requests.put(
+        f"{context.dataset_api_url}/datasets/{context.dataset_id}/editions/{context.edition_id}/versions/{version}",
+        json=put_state_body,
+        headers=context.headers,
+    )
+
+
+@when('I update the existing version "{version}" state to "{state}"')
+def update_existing_version_state(context, version, state):
     put_state_body = {"type": "static", "state": state}
     context.response = requests.put(
         f"{context.dataset_api_url}/datasets/{context.dataset_id}/editions/{context.edition_id}/versions/{version}",
@@ -257,3 +271,12 @@ def response_should_contain_new_dataset_title(context, new_title):
 def response_should_contain_new_edition_title(context, new_title):
     data = context.response.json()
     assert new_title in data["edition_title"]
+
+
+@then("there should be a current document in the datasets mongo collection")
+def collection_should_contain_a_current_document(context):
+    context.mongo_dataset_record = _get_mongo_dataset_record_by_id(context.dataset_id)
+    assert context.mongo_dataset_record is not None
+    current_record = context.mongo_dataset_record["current"]
+    assert current_record["title"] == context.dataset_id
+    assert current_record["state"] == "published"

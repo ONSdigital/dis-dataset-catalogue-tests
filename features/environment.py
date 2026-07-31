@@ -1,6 +1,8 @@
 import csv
 from playwright.sync_api import sync_playwright
+from pymongo import MongoClient
 
+MONGO_URL = "mongodb://localhost:27017"
 
 def make_cookie(name, value):
     return {

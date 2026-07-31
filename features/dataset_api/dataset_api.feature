@@ -87,3 +87,16 @@ Feature: Dataset API
     Given the dataset API is available
     When I delete version "1" for dataset ID "dataset-delete-version", edition ID "edition-delete-version"
     Then the response status code should be "204"
+
+  Scenario: Publish a dataset journey
+    Given the dataset API is available
+    When I add a new version for dataset ID "dataset-publish-journey", edition ID "edition-publish-journey" and version "1"
+    When I update the existing version "1" state to "associated"
+    Then the response status code should be "200"
+    When I update the existing version "1" state to "approved"
+    Then the response status code should be "200"
+    When I update the existing version "1" state to "published"
+    Then the response status code should be "200"
+    And there should be a current document in the datasets mongo collection
+
+
