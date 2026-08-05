@@ -121,8 +121,10 @@ def _post_file_metadata(context, version):
 
 def _post_dataset_with_multiple_editions(context, dataset_id, num_editions):
     _post_dataset(context, dataset_id)
+    context.edition_ids = []
     for i in range(num_editions):
         _post_version(context, f"edition-{i}", 1)
+        context.edition_ids.append(context.edition_id)
 
 
 def _post_dataset_with_multiple_versions(context, dataset_id, edition_id, num_versions):
