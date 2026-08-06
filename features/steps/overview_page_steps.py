@@ -169,7 +169,7 @@ def dataset_json_contains_dataset_details(context):
     _assert_json_response(context)
     data = context.response.json()
     assert data["description"]["title"] == context.dataset_id
-    assert data["uri"] == f"/businessindustryandtrade/datasets/{context.dataset_id}"
+    assert data["uri"] == f"/{DEFAULT_TOPIC_SLUG}/datasets/{context.dataset_id}"
 
 
 @then("the response should contain the dataset edition details in JSON format")
@@ -178,7 +178,7 @@ def dataset_json_contains_edition_details(context):
     data = context.response.json()
     assert data["description"]["title"] == context.dataset_id
     assert data["description"]["edition"] == context.edition_id
-    assert data["uri"] == f"/businessindustryandtrade/datasets/{context.dataset_id}/editions/{context.edition_id}"
+    assert data["uri"] == f"/{DEFAULT_TOPIC_SLUG}/datasets/{context.dataset_id}/editions/{context.edition_id}"
 
 
 @then("the response should contain the version details in JSON format")
@@ -187,7 +187,7 @@ def dataset_json_contains_version_details(context):
     data = context.response.json()
     assert data["description"]["title"] == context.dataset_id
     assert data["description"]["edition"] == context.edition_id
-    assert data["uri"] == f"/businessindustryandtrade/datasets/{context.dataset_id}/editions/{context.edition_id}/versions/1"
+    assert data["uri"] == f"/{DEFAULT_TOPIC_SLUG}/datasets/{context.dataset_id}/editions/{context.edition_id}/versions/1"
 
 
 @when("the user clicks the approve button")
