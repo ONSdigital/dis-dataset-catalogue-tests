@@ -18,6 +18,8 @@ Feature: Overview page
     Given the user navigates to the editions page for "editions-multiple-editions" with "3" editions
     Then there is a response code of "200"
     And the editions should be listed on the page
+    And the user can click on one of the editions
+    And the version details should be displayed on the page
 
   Scenario: A user navigating to a specific version
     Given the user navigates to the version page for "version-page" with edition "version-page" and version "1"

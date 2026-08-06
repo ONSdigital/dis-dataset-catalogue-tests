@@ -198,3 +198,9 @@ def click_approve_button(context):
 @then("the version page should show approved")
 def page_should_show_approved(context):
     assert "Approved" in context.page.text_content("body")
+
+
+@then("the user can click on one of the editions")
+def click_on_edition(context):
+    context.edition_id = context.edition_ids[1]
+    context.page.get_by_role("link", name=context.edition_ids[1]).click()
