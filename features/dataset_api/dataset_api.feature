@@ -71,6 +71,20 @@ Feature: Dataset API
     Then the response status code should be "201"
     And the response should contain the version with ID "1"
 
+  Scenario: Add a version and check all values
+    Given the dataset API is available
+    When I add a new version for dataset ID "dataset-add-version-values" and edition ID "edition-add-version-values"
+    Then the response status code should be "201"
+    And the response should contain the version with ID "1"
+    And the response should contain all values used to create the version
+
+  Scenario: Add a version with all distribution types
+    Given the dataset API is available
+    When I add a new version with all distribution types for dataset ID "dataset-all-distributions" and edition ID "edition-all-distributions"
+    Then the response status code should be "201"
+    And the response should contain the version with ID "1"
+    And the response should contain all values used to create the version
+
   Scenario: Update a version
     Given the dataset API is available
     When I update version "1" for dataset ID "dataset-update-version", edition ID "edition-update-version"
@@ -98,5 +112,3 @@ Feature: Dataset API
     When I update the existing version "1" state to "published"
     Then the response status code should be "200"
     And there should be a current document in the datasets mongo collection
-
-

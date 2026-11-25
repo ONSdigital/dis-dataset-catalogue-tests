@@ -9,6 +9,7 @@ from features.utils import (
     _post_dataset_with_multiple_editions,
     _post_dataset_with_multiple_versions,
     _post_version,
+    _post_version_with_all_distributions,
     _post_file_metadata,
     _get_mongo_dataset_record_by_id,
 )
@@ -134,6 +135,14 @@ def add_version(context, dataset_id, edition_id):
 
 
 @when(
+    'I add a new version with all distribution types for dataset ID "{dataset_id}" and edition ID "{edition_id}"'
+)
+def add_version_with_all_distributions(context, dataset_id, edition_id):
+    _post_dataset(context, dataset_id)
+    context.response = _post_version_with_all_distributions(context, edition_id, 1)
+
+
+@when(
     'I add a new version for dataset ID "{dataset_id}", edition ID "{edition_id}" and version "{version}"'
 )
 def add_version_with_id(context, dataset_id, edition_id, version):
@@ -248,6 +257,28 @@ def response_should_contain_version(context, version):
     data = context.response.json()
     assert data["version"] == int(version)
 
+
+@then("the response should contain all values used to create the version")
+def response_should_contain_all_version_values(context):
+    data = context.response.json()
+    expected_values = [
+        ("dataset_id", context.dataset_id),
+        ("edition", context.edition_id),
+        ("edition_title", context.version_body["edition_title"]),
+        ("release_date", context.version_body["release_date"]),
+        ("state", "associated"),
+        ("version", 1),
+        ("type", context.version_body["type"]),
+    ]
+
+    for field, expected in expected_values:
+        assert data[field] == expected
+
+    for expected in context.version_body["distributions"]:
+        assert any(
+            all(actual.get(field) == value for field, value in expected.items())
+            for actual in data["distributions"]
+        )
 
 @then('the response should contain the version with state "{state}"')
 def response_should_contain_version_with_state(context, state):

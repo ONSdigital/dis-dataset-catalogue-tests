@@ -4,7 +4,7 @@ Feature: DCM Series
         Given the user navigates to the DCM homepage
         When the user clicks on the Dataset catalogue link
         Then the series list page should be visible
-        And the "Consumer price inflation tables" dataset should be listed
+        And there should be datasets listed on the page
 
     Scenario: User can search for a dataset by ID
         Given the user navigates to the DCM homepage

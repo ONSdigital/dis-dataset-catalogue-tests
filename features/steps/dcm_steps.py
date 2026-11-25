@@ -33,7 +33,25 @@ def user_fills_in_generated_title(context):
 
 @when('the user fills in "{value}" as the "{label}"')
 def user_fills_in_value(context, value, label):
-    context.page.get_by_label(label).fill(value)
+    field = context.page.get_by_label(label, exact=True)
+    field_count = field.count()
+
+    if field_count == 0:
+        field = context.page.get_by_label(label)
+        field_count = field.count()
+
+    if field_count == 1:
+        field.fill(value)
+        return
+
+    if label == "Description":
+        # On edition create pages there are multiple Description fields.
+        usage_note_description = context.page.get_by_test_id("usage-notes-textarea-0")
+        if usage_note_description.count() == 1:
+            usage_note_description.fill(value)
+            return
+
+    field.first.fill(value)
 
 @when('the user expands the "{topic}" topic')
 def user_expands_topic(context, topic):
@@ -68,6 +86,11 @@ def navigation_links_are_visible(context):
 def series_list_page_should_be_visible(context):
     expect(context.page.get_by_role("button", name="Create new series")).to_be_visible()
 
+
+@then("there should be datasets listed on the page")
+def datasets_should_be_listed_on_page(context):
+    expect(context.page.get_by_text("Series ID:").first).to_be_visible()
+
 @then('the "{dataset_title}" dataset should be listed')
 def dataset_should_be_listed(context, dataset_title):
     expect(context.page.get_by_role("link", name=dataset_title)).to_be_visible()
@@ -90,4 +113,13 @@ def dataset_with_series_id_should_be_visible(context, series_id):
 
 @then('no results should be found for "{search_term}"')
 def no_results_found(context, search_term):
-    expect(context.page.get_by_text(f"No results found for {search_term}")).to_be_visible()
+    expect(context.page.get_by_text(f"No results found for \"{search_term}\"")).to_be_visible()
+
+@when('the user selects "{value}" as the Alert type')
+def user_selects_alert_type(context, value):
+    context.page.get_by_role("radio", name=value, exact=True).check()
+
+
+@when('the user fills in "{value}" as the Alert description')
+def user_fills_in_alert_description(context, value):
+    context.page.get_by_test_id("alerts-textarea-0").fill(value)

@@ -47,5 +47,6 @@ def user_clicks_create_edition(context):
 
 @then("the edition should be created successfully")
 def edition_should_be_created_successfully(context):
+    context.page.wait_for_url("**/editions/**")
     expect(context.page.get_by_text("Edition saved.")).to_be_visible()
     expect(context.page.get_by_role("heading", name=context.edition_title)).to_be_visible()

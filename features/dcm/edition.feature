@@ -24,6 +24,12 @@ Feature: DCM Edition
         And the user fills in "09" as the "Hours"
         And the user fills in "30" as the "Minutes"
         And the user selects "No accreditation" as the Quality designation
+        When the user fills in "Test note" as the "Note title"
+        And the user fills in "This is a test description" as the "Description"
+        And the user selects "Notice" as the Alert type
+        And the user fills in "This is an alert description" as the Alert description
+        And the user fills in "Related information" as the "Title"
+        And the user fills in "https://www.ons.gov.uk" as the "URL"
         And the user uploads the test CSV file
         And the user clicks Create edition
         Then the edition should be created successfully

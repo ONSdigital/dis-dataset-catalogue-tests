@@ -40,7 +40,7 @@ def _post_dataset(context, dataset_id):
     return post_dataset_response
 
 
-def _post_version(context, edition_id, version):
+def _post_version(context, edition_id, version, distribution_formats=("csv",)):
     context.edition_id = f"{edition_id}-{"".join(random.choice(string.ascii_lowercase) for i in range(4))}"
     context.filename = (
         f"{"".join(random.choice(string.ascii_lowercase) for i in range(8))}.csv"
@@ -49,21 +49,42 @@ def _post_version(context, edition_id, version):
     version_body = {
         "distributions": [
             {
-                "title": "CSV distribution",
-                "download_url": context.path,
-                "format": "csv",
+                "title": f"{distribution_format.upper()} distribution",
+                "download_url": f"{context.path.removesuffix('.csv')}.{distribution_format}",
+                "format": distribution_format,
             }
+            for distribution_format in distribution_formats
         ],
         "edition_title": f"{context.edition_id}",
         "release_date": "2026-12-31T00:00:00.000Z",
         "type": "static",
     }
+    context.version_body = version_body
     post_version_response = requests.post(
         f"{context.dataset_api_url}/datasets/{context.dataset_id}/editions/{context.edition_id}/versions",
         json=version_body,
         headers=context.headers,
     )
     return post_version_response
+
+
+def _post_version_with_all_distributions(context, edition_id, version):
+    return _post_version(
+        context,
+        edition_id,
+        version,
+        distribution_formats=(
+            "csv",
+            "sdmx",
+            "xls",
+            "xlsx",
+            "csdb",
+            "csvw-metadata",
+            "json",
+            "xml",
+            # zip is supported but only for migrated datasets
+        ),
+    )
 
 
 def _post_versions(context, edition_id, num_versions):

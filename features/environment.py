@@ -1,8 +1,10 @@
 import csv
+import os
 from playwright.sync_api import sync_playwright
 from pymongo import MongoClient
 
 MONGO_URL = "mongodb://localhost:27017"
+AUTH_STATE_PATH = "/tmp/dcm-auth-state.json"
 
 def make_cookie(name, value):
     return {
@@ -39,16 +41,13 @@ def before_all(context):
     id_token = next(c["value"] for c in cookies if c["name"] == "id_token")
     context.access_token = access_cookie["value"].strip('"')
     context.id_token = id_token.strip('"')
+    browser_context.storage_state(path=AUTH_STATE_PATH)
     browser_context.close()
 
 
 def before_scenario(context, scenario):
     """Runs before each scenario. Creates a new browser context and page"""
-    context.browser_context = context.browser.new_context()
-    context.browser_context.add_cookies([
-        make_cookie("access_token", f'"{context.access_token}"'),
-        make_cookie("id_token", context.id_token),
-    ])
+    context.browser_context = context.browser.new_context(storage_state=AUTH_STATE_PATH)
     context.page = context.browser_context.new_page()
 
 
@@ -87,3 +86,5 @@ def after_all(context):
     """Runs once after all tests. Cleans up playwright"""
     context.browser.close()
     context.playwright.stop()
+    if os.path.exists(AUTH_STATE_PATH):
+        os.remove(AUTH_STATE_PATH)
