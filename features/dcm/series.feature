@@ -1,6 +1,6 @@
 Feature: DCM Series
 
-    Scenario: User can find a dataset and version
+    Scenario: Datasets are listed on the series list page
         Given the user navigates to the DCM homepage
         When the user clicks on the Dataset catalogue link
         Then the series list page should be visible
